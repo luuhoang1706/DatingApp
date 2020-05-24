@@ -21,7 +21,7 @@ export class AlertifyService {
     }
     error(message: string)
     {
-      alertify.arror(message);
+      alertify.error(message);
     }
     warning(message: string)
     {
