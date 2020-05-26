@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using AutoMapper;
 
 namespace DatingApp.API
 {
@@ -30,9 +32,16 @@ namespace DatingApp.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+            services.AddAutoMapper(typeof(Startup));
+            services.AddTransient<Seed>();
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc(options => options.EnableEndpointRouting =  false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddControllersWithViews()
+              .AddNewtonsoftJson(options =>
+               options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+              );
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IDatingRepository, DatingRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -47,7 +56,7 @@ namespace DatingApp.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Seed seeder)
         {
             if (env.IsDevelopment())
             {
@@ -77,6 +86,7 @@ namespace DatingApp.API
             // {
             //     endpoints.MapControllers();
             // });
+            // seeder.SeedUsers();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseAuthentication();
             app.UseMvc();
