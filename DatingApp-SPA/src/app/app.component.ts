@@ -7,6 +7,9 @@ import { AuthService } from './_services/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  title(title: any) {
+    throw new Error("Method not implemented.");
+  }
   jwtHelper = new JwtHelperService();
 
   constructor(private authService: AuthService){}
