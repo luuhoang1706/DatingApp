@@ -9,11 +9,7 @@ import { AuthService } from '../_services/auth.service';
 
 @Injectable()
 export class MemberEditResolver implements Resolve<User> {
-<<<<<<< HEAD
     constructor(private userService: UserService, private router: Router,private authService: AuthService,
-=======
-    constructor(private userService: UserService, private router: Router, private authService: AuthService,
->>>>>>> 65afe56064439c9ce28c9aad420ee4a71796a6f4
         private alertify: AlertifyService) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<User> {
