@@ -6,9 +6,9 @@ declare let alertify: any;
 })
 export class AlertifyService {
   constructor() { }
-  comfirm(message: string, okCallback: () => any) {
+  confirm(message: string, okCallback: () => any) {
     // tslint:disable-next-line:only-arrow-functions
-    alertify.comfirm(message, function(e) {
+    alertify.confirm(message, function(e) {
       if (e) {
         okCallback();
       }
