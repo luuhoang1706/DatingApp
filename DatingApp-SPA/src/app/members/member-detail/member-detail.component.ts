@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
 import { User } from 'src/app/_models/user';
 import { UserService } from 'src/app/_services/user.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
@@ -11,8 +11,8 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
   templateUrl: './member-detail.component.html',
   styleUrls: ['./member-detail.component.css']
 })
-export class MemberDetailComponent implements OnInit {
-  @ViewChild('memberTabs',{static: false}) memberTabs: TabsetComponent;
+export class MemberDetailComponent implements OnInit, DoCheck {
+  @ViewChild('memberTabs') memberTabs: TabsetComponent;
   user: User;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
@@ -20,7 +20,7 @@ export class MemberDetailComponent implements OnInit {
   constructor(private userService: UserService, private alertify: AlertifyService,
     private route: ActivatedRoute) { }
 
-    ngAfterViewInit() {
+    ngDoCheck() {
       this.route.queryParams.subscribe((params) => {
         const selectedTab = params['tab'];
         this.memberTabs.tabs[selectedTab > 0 ? selectedTab : 0].active = true;
